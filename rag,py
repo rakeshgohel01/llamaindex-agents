@@ -1,0 +1,42 @@
+import time
+from dotenv import load_dotenv
+
+load_dotenv()
+from llama_index.core.agent import ReActAgent
+from llama_index.llms.openai import OpenAI
+from llama_index.core.tools import FunctionTool
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Settings
+
+def multiply(a: float, b: float) -> float:
+    return a * b
+
+multiply_tool = FunctionTool.from_defaults(fn=multiply)
+
+def add(a: float, b: float) -> float:
+    return a + b
+
+add_tool = FunctionTool.from_defaults(fn=add)
+
+Settings.llm = OpenAI(model="gpt-3.5-turbo", temperature=0.0)
+
+# Start timing
+start_time = time.time()
+
+documents = SimpleDirectoryReader('./data').load_data()
+index = VectorStoreIndex.from_documents(documents)
+query_engine = index.as_query_engine()
+
+# End timing for setup
+setup_end_time = time.time()
+
+response = query_engine.query('What was the total amount of the 2023 Canadian federal budget?')
+
+# End timing for query
+query_end_time = time.time()
+
+print(response)
+
+# Print elapsed times
+print(f"Setup time: {setup_end_time - start_time} seconds")
+print(f"Query time: {query_end_time - setup_end_time} seconds")
+print(f"Total time: {query_end_time - start_time} seconds")

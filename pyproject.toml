@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "li-agent"
+version = "0.1.0"
+description = ""
+authors = ["Rakesh Gohel <mocha384@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+llama-index = "^0.10.48.post1"
+python-dotenv = "^1.0.1"
+llama-index-llms-ollama = "^0.1.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
